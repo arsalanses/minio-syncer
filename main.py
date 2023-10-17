@@ -20,7 +20,7 @@ with open(csv_data_path, mode='r') as csv_file:
     csv_reader = reader(csv_file, delimiter=',')
     for row in csv_reader:
         client.fput_object(bucket_name, "public/" + row[1] + row[0].split("/")[-1], local_file_path + row[0])
-        print(f'public/{row[1]}/{row[0].split("/")[-1]} <= {local_file_path}/{row[0]}')
+        print(f'public/{row[1]}/{row[0].split("/")[-1]} <= {local_file_path}{row[0]}')
         # counter += 1
         # if counter == 5:
         #     break
