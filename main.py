@@ -1,16 +1,26 @@
 from dotenv import load_dotenv
 from minio import Minio
+from csv import reader
 from os import getenv
 
 load_dotenv()
 
 client = Minio(
-    str(getenv('MINIO_HOST')),
+    endpoint=getenv('MINIO_HOST'),
     access_key=getenv('ACCESS_KEY'),
     secret_key=getenv('SECRET_KEY'),
 )
 
-buckets = client.list_buckets()
+bucket_name = getenv('BUCKET_NAME')
+local_file_path = getenv('LOCAL_FILE')
+csv_data_path = getenv('CSV_DATA')
 
-for bucket in buckets:
-    print(bucket)
+counter = 0
+with open(csv_data_path, mode='r') as csv_file:
+    csv_reader = reader(csv_file, delimiter=',')
+    for row in csv_reader:
+        client.fput_object(bucket_name, local_file_path + row[0], "public/" + row[1])
+        print(f'{local_file_path}{row[0]} => public/{row[1]}')
+        counter += 1
+        if counter == 5:
+            break
