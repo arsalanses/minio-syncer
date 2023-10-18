@@ -28,11 +28,18 @@ with open(csv_data_path, mode='r') as csv_file:
             for size in sizes:
                 object_name_with_size = object_name[:-4] + '-' + size + object_name[-4:]
                 file_path_with_size = file_path[:-4] + '-' + file_path[-4:]
-                client.fput_object(bucket_name, object_name_with_size, file_path_with_size)
+                try:
+                    client.fput_object(bucket_name, object_name_with_size, file_path_with_size)
+                except S3Error as e:
+                    print(f"Error uploading file: {e}")
+                except FileNotFoundError:
+                    print("FileNotFoundError")
                 print(f'{counter} \t {object_name_with_size} <= {file_path_with_size}')
                 counter += 1
         except S3Error as e:
             print(f"Error uploading file: {e}")
+        except FileNotFoundError:
+            print("FileNotFoundError")
         # else:
         #     print(f'success.')
         # finally:
