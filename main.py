@@ -27,7 +27,7 @@ with open(csv_data_path, mode='r') as csv_file:
             client.fput_object(bucket_name, object_name, file_path)
             for size in sizes:
                 object_name_with_size = object_name[:-4] + '-' + size + object_name[-4:]
-                file_path_with_size = file_path[:-4] + '-' + file_path[-4:]
+                file_path_with_size = file_path[:-4] + '-' + size + file_path[-4:]
                 try:
                     client.fput_object(bucket_name, object_name_with_size, file_path_with_size)
                 except S3Error as e:
